@@ -1,10 +1,10 @@
-package `in`.eugenel
+package `in`.eugenel.botlin
 
 class Logger {
     enum class LogType {
         BOT,
-        MESSAGE,
-        ERROR
+        MSG,
+        ERR
     }
 
     fun log(type: LogType, message: String) {
