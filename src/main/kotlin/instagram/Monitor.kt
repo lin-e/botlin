@@ -55,9 +55,9 @@ class Monitor {
                         ?.array<JsonObject>("edges")?.get(0)
                         ?.obj("node")
                     val ts = node?.int("taken_at_timestamp") ?: -1
+                    if (lastTimestamp == 0) lastTimestamp = ts
                     if (ts > lastTimestamp) {
                         lastTimestamp = ts
-                        //val img = node?.string("thumbnail_src") ?: ""
                         val likes = node?.obj("edge_liked_by")?.int("count") ?: 0
                         val comments = node?.obj("edge_media_to_comment")?.int("count") ?: 0
                         val url = "https://www.instagram.com/p/${node?.string("shortcode") ?: ""}"
