@@ -8,8 +8,7 @@ class Ping : Command {
     override val syntax: String = ""
 
     override fun run(msg: Message, args: List<String>): Message {
-        val m = msg.channel.block().createMessage("Pong!").block()
-        return m!!
+        return send(msg.channel, "Pong!")
     }
 
 }
