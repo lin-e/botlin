@@ -8,8 +8,12 @@ import com.beust.klaxon.*
 import discord4j.core.DiscordClient
 import discord4j.core.DiscordClientBuilder
 import discord4j.core.`object`.entity.Message
+import discord4j.core.`object`.entity.MessageChannel
+import discord4j.core.`object`.util.Snowflake
 import discord4j.core.event.domain.lifecycle.ReadyEvent
 import discord4j.core.event.domain.message.MessageCreateEvent
+import reactor.core.publisher.Mono
+import reactor.core.publisher.toMono
 
 class Botlin {
     val client: DiscordClient
@@ -18,7 +22,7 @@ class Botlin {
     val commands: MutableMap<String, Command>
 
     constructor (config: String) {
-        val json = Parser().parse(config) as JsonObject
+        val json = Parser.default().parse(config) as JsonObject
         client = DiscordClientBuilder(json["token"].toString()).build()
         logger = Logger()
         trigger = json["trigger"].toString()
@@ -39,10 +43,15 @@ class Botlin {
     fun add(c: Command) {
         c.triggers.forEach {
             when (it) {
-                in commands.keys -> logger.log(LogType.BOT, "Conflict: $it")
+                in commands.keys -> logger.log(LogType.BOT, "CommandManager -> Conflict: $it")
                 else -> commands[it] = c
             }
         }
+    }
+
+    fun send(id: Long, s: String): Message {
+        val c = client.getChannelById(Snowflake.of(id)).block() as MessageChannel
+        return c.createMessage(s).block()!!
     }
 
     inner class MessageThread : Thread {

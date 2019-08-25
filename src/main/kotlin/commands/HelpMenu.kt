@@ -13,7 +13,7 @@ class HelpMenu : Command {
     override fun run(msg: Message, args: List<String>): Message {
         val resp = "Valid commands are:" + bot!!.commands.values.map { c ->
             val prefix = "\n    " + bot!!.trigger
-            val syntax = c.syntax + (if (c.syntax == "") "" else " ") + " - "
+            val syntax = (if (c.syntax == "") "" else " ") + c.syntax + " - "
             prefix + c.triggers.joinToString(", ") + syntax + c.description
         }.joinToString("")
         return send(msg.channel, resp)
