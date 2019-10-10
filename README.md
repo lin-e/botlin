@@ -1,2 +1,2 @@
 # botlin
-lol personal slack bot?
+lol personal discord bot?
